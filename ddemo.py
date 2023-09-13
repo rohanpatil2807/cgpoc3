@@ -1,6 +1,6 @@
 import sys
 import configparser
-import findspark
+# import findspark
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import date_format
 from pyspark.sql.functions import lit, current_date
@@ -54,14 +54,14 @@ def generate_report_5(spark):
     return report_5
 
 
-def generate_report_6(spark):
-    report_6 = spark.sql('''select i.category as category, (o.item_quantity * o.detail_unit_price) as total_amount
-                            from items i 
-                            join order_details o
-                            on i.item_id = o.item_id
-                            group by category,total_amount
-                            order by total_amount desc''')
-    return report_6
+# def generate_report_6(spark):
+#     report_6 = spark.sql('''select i.category as category, (o.item_quantity * o.detail_unit_price) as total_amount
+#                             from items i
+#                             join order_details o
+#                             on i.item_id = o.item_id
+#                             group by category,total_amount
+#                             order by total_amount desc''')
+#     return report_6
 
 
 
@@ -117,16 +117,14 @@ def main():
 
 
 
-    # reports = [final_report3, final_report4, final_report5, final_report4]
-    # for r in reports:
-    #     local_path = f"{properties['save_path']}/{r}.parquet"
-    #        for r in reports:
-    #         r.write.parquet(local_path)
+
 
     final_report3.write.partitionBy('current_date').parquet(properties['save_path']+'/output_table3')
     final_report4.write.partitionBy('current_date').parquet(properties['save_path'] + '/output_table4')
     final_report5.write.partitionBy('current_date').parquet(properties['save_path'] + '/output_table5')
     final_report6.write.partitionBy('current_date').parquet(properties['save_path'] + '/output_table6')
+
+
 
 
 if __name__ == "__main__":
